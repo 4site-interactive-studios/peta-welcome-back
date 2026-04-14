@@ -1,0 +1,24 @@
+{
+  "name": "peta-remember-me",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:prod": "tsc && vite build && npm exec terser -- -c -m --module dist/welcome-back.js > dist/welcome-back.min.js",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "browserslist-to-esbuild": "^2.1.1",
+    "sass": "^1.99.0",
+    "terser": "^5.46.1",
+    "typescript": "~6.0.2",
+    "vite": "^8.0.4",
+    "vite-plugin-banner": "^0.8.1"
+  },
+  "dependencies": {
+    "tippy.js": "^6.3.7"
+  }
+}

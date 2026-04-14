@@ -1,0 +1,165 @@
+& {
+  --color-primary: #216ABE;
+  --color-link: #0085E7;
+  --color-body: #222;
+  --color-secondary: #686868;
+  --font-family: 'Figtree', sans-serif;
+
+  .welcome-back {
+    font-family: var(--font-family);
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin: 8px 20px;
+
+    h1 {
+      color: var(--color-secondary);
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 26px;
+      margin-top: 0px;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: var(--color-secondary);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 19px;
+      margin: 0;
+    }
+
+    .edit {
+      cursor: pointer;
+      color: var(--color-primary);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 26px;
+      text-decoration-line: underline;
+      text-decoration-style: solid;
+      text-decoration-skip-ink: auto;
+      text-decoration-thickness: auto;
+      text-underline-offset: auto;
+      text-underline-position: from-font;
+    }
+
+    .edit::after {
+      content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="14" viewBox="0 0 10 14" fill="none"><path d="M9.58856 1.11177L7.95656 0.12915C7.54482 -0.11847 7.00243 0.000720175 6.74304 0.394786L6.09988 1.37556L9.22118 3.25396L9.86482 2.27411C10.1232 1.87912 10.0003 1.35893 9.58856 1.11177ZM0.546733 9.8496L3.66803 11.7271L8.75496 3.96771L5.63174 2.08839L0.546733 9.8496ZM0 14L3.14299 12.4085L0.131621 10.5948L0 14Z" fill="%23216ABE" /></svg>');
+      fill: var(--color-primary);
+      height: 14px;
+      margin-left: 5px;
+    }
+
+    .edit:hover {
+      filter: brightness(1.1);
+    }
+
+  }
+
+  .rememberme-content {
+    font-family: var(--font-family);
+
+    #rememberme-learn-more-toggle {
+      color: var(--color-link);
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+  }
+}
+
+.welcome-back-sample-css {
+  display: none;
+}
+
+/* TIPPY.JS CSS */
+.tippy-box[data-animation=fade][data-state=hidden] {
+  opacity: 0;
+}
+
+[data-tippy-root] {
+  max-width: calc(100vw - 10px);
+}
+
+.tippy-box {
+  font-family: var(--font-family);
+  position: relative;
+  background-color: #333;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 1.4;
+  white-space: normal;
+  outline: 0;
+  transition-property: transform, visibility, opacity;
+}
+
+.tippy-box[data-placement^=top]>.tippy-arrow {
+  bottom: 0;
+}
+
+.tippy-box[data-placement^=top]>.tippy-arrow:before {
+  bottom: -7px;
+  left: 0;
+  border-width: 8px 8px 0;
+  border-top-color: initial;
+  transform-origin: center top;
+}
+
+.tippy-box[data-placement^=bottom]>.tippy-arrow {
+  top: 0;
+}
+
+.tippy-box[data-placement^=bottom]>.tippy-arrow:before {
+  top: -7px;
+  left: 0;
+  border-width: 0 8px 8px;
+  border-bottom-color: initial;
+  transform-origin: center bottom;
+}
+
+.tippy-box[data-placement^=left]>.tippy-arrow {
+  right: 0;
+}
+
+.tippy-box[data-placement^=left]>.tippy-arrow:before {
+  border-width: 8px 0 8px 8px;
+  border-left-color: initial;
+  right: -7px;
+  transform-origin: center left;
+}
+
+.tippy-box[data-placement^=right]>.tippy-arrow {
+  left: 0;
+}
+
+.tippy-box[data-placement^=right]>.tippy-arrow:before {
+  left: -7px;
+  border-width: 8px 8px 8px 0;
+  border-right-color: initial;
+  transform-origin: center right;
+}
+
+.tippy-box[data-inertia][data-state=visible] {
+  transition-timing-function: cubic-bezier(0.54, 1.5, 0.38, 1.11);
+}
+
+.tippy-arrow {
+  width: 16px;
+  height: 16px;
+  color: #333;
+}
+
+.tippy-arrow:before {
+  content: "";
+  position: absolute;
+  border-color: transparent;
+  border-style: solid;
+}
+
+.tippy-content {
+  position: relative;
+  padding: 5px 9px;
+  z-index: 1;
+}
