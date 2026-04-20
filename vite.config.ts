@@ -1,11 +1,13 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import banner from 'vite-plugin-banner';
+import mkcert from 'vite-plugin-mkcert';
 import browserslistToEsbuild from "browserslist-to-esbuild";
 import sass from 'sass';
 
 export default defineConfig({
   plugins: [
+    mkcert(),
     banner({
       content: `
 /*!
@@ -67,4 +69,12 @@ export default defineConfig({
       },
     },
   },
+  server: {
+    allowedHosts: [".peta.org"],
+    cors: {
+      origin: "*", // Allow all origins (you can restrict this to specific origins if needed)
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+    },
+  }
 });
