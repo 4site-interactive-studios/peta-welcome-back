@@ -1,6 +1,10 @@
-
 export class Logger {
   private readonly debugMode = window.location.search.includes('debug');
+  private prefix: string;
+
+  constructor(prefix: string) {
+    this.prefix = prefix;
+  }
 
   public log(message: string, emoji: string = '🟢', data: unknown = null): void {
     if (!this.debugMode) {
@@ -41,7 +45,7 @@ export class Logger {
     }
 
     const style = `color: ${color}; background-color: ${bgColor}; font-weight: bold; font-family: monospace; font-size: 14px; padding: 4px 8px; border-radius: 4px;`;
-    const formattedMessage = `%c${emoji} [Welcome Back] ${message}`;
+    const formattedMessage = `%c${emoji} [${this.prefix}] ${message}`;
 
     if (data !== null) {
       console.log(formattedMessage, style, data);

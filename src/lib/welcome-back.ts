@@ -1,5 +1,11 @@
+/**
+ * WelcomeBack - Leverages PETA's existing remember-me script. Creates a Welcome Back block in a specified location
+ * Handles clearing autofill by passing along interaction to remember-me
+ * Hides fields when autofill was used
+ */
 import { EN_FIELD_POPULATOR_CONFIG, EN_FIELDS_TO_HIDE, is_peta_latino } from "./peta-compatability-layer";
 import { Logger } from "./logger";
+import { hideElement, elementExists } from "./common";
 
 interface WelcomeBackConfig {
     language?: string;
@@ -36,7 +42,7 @@ const defaultConfig: WelcomeBackConfig = {
 
 export default class WelcomeBack {
     private config: WelcomeBackConfig;
-    private logger = new Logger();
+    private logger = new Logger('WB-WelcomeBack');
 
     constructor() {
         this.config = { ...defaultConfig, language: is_peta_latino() ? 'es' : 'en', ...window.WelcomeBackOptions };
@@ -51,8 +57,8 @@ export default class WelcomeBack {
     }
 
     private shouldRun(): boolean {
-        return this.elementExists('input[name="supporter.emailAddress"]') &&
-            this.elementExists(this.config.location_selector) &&
+        return elementExists('input[name="supporter.emailAddress"]') &&
+            elementExists(this.config.location_selector) &&
             typeof ENFieldPopulator !== 'undefined';
     }
 
@@ -155,19 +161,13 @@ export default class WelcomeBack {
 
     private hideOptionalElements(): void {
         if (this.config.hide_clear_autofill) {
-            this.hideElement('#clear-autofill-data');
+            hideElement('#clear-autofill-data');
         }
         if (this.config.hide_change_paymenttype) {
-            this.hideElement('#clear-payment-data');
+            hideElement('#clear-payment-data');
         }
     }
 
-    private hideElement(selector: string): void {
-        const element = document.querySelector(selector) as HTMLElement;
-        if (element) {
-            element.style.display = 'none';
-        }
-    }
 
     private getSupporterDetails(): SupporterDetails | null {
         const email = this.getInputValue('input[name="supporter.emailAddress"]');
@@ -219,7 +219,4 @@ export default class WelcomeBack {
         document.body.setAttribute('data-welcome-back', value ? 'true' : 'false');
     }
 
-    private elementExists(selector: string): boolean {
-        return !!document.querySelector(selector);
-    }
 }

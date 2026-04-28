@@ -1,3 +1,7 @@
+/**
+ * Contains configuration and utility functions to be more compatible with PETA forms
+ * Where, generally, the remainder of the functions in this codebase are more universal in application
+ */
 interface ENFieldPopulatorConfig {
   cookie_name: string;
   remote_origin: string;
