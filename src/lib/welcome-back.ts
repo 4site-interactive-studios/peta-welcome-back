@@ -5,7 +5,7 @@
  */
 import { EN_FIELD_POPULATOR_CONFIG, EN_FIELDS_TO_HIDE, is_peta_latino } from "./peta-compatability-layer";
 import { Logger } from "./logger";
-import { hideElement, elementExists } from "./common";
+import { elementExists } from "./common";
 
 interface WelcomeBackConfig {
     language?: string;
@@ -49,7 +49,7 @@ export default class WelcomeBack {
         this.setBodyData(false);
         if (this.shouldRun() && this.config.run) {
             this.logger.log("Initializing WelcomeBack", "🎉");
-            this.createConditionalHide();
+            this.createCSS();
             this.addListeners();
         } else {
             this.logger.log("WelcomeBack will not run. Conditions not met.", "⚠️");
@@ -99,7 +99,6 @@ export default class WelcomeBack {
         insertLocation.insertAdjacentElement('afterend', welcomeBackBlock);
 
         this.addEditButtonListener();
-        this.hideOptionalElements();
         this.setBodyData(true);
     }
 
@@ -159,16 +158,6 @@ export default class WelcomeBack {
         });
     }
 
-    private hideOptionalElements(): void {
-        if (this.config.hide_clear_autofill) {
-            hideElement('#clear-autofill-data');
-        }
-        if (this.config.hide_change_paymenttype) {
-            hideElement('#clear-payment-data');
-        }
-    }
-
-
     private getSupporterDetails(): SupporterDetails | null {
         const email = this.getInputValue('input[name="supporter.emailAddress"]');
         const firstName = this.cleanInput('input[name="supporter.firstName"]');
@@ -203,13 +192,19 @@ export default class WelcomeBack {
         return value?.replace(/[^\p{L}\p{N}\p{P}\p{Z}]/gu, '').trim();
     }
 
-    private createConditionalHide(): void {
+    private createCSS(): void {
         if (!this.config.conditional_hide_selectors) return;
-        const stylesheet = `
+        let stylesheet = `
             ${this.config.conditional_hide_selectors.map(selector => `[data-welcome-back="true"] ${selector}`).join(', ')} {
                 display: none !important;
             }
         `;
+        if (this.config.hide_change_paymenttype) {
+            stylesheet += '#clear-payment-data { display: none !important; }';
+        }
+        if (this.config.hide_clear_autofill) {
+            stylesheet += '#clear-autofill-data { display: none !important; }';
+        }
         const style = document.createElement('style');
         style.appendChild(document.createTextNode(stylesheet));
         document.head.appendChild(style);

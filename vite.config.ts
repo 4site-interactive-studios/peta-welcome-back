@@ -58,6 +58,7 @@ export default defineConfig({
     rollupOptions: {
       external: [],
       output: {
+        entryFileNames: 'welcome-back.js',
         assetFileNames: 'welcome-back.css',
       },
     },

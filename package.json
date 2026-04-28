@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "build:prod": "tsc && vite build && npm exec terser -- -c -m --module dist/welcome-back.js > dist/welcome-back.min.js",
+    "build:prod": "tsc && vite build && npm exec terser -- dist/welcome-back.js -c -m -o dist/welcome-back.min.js",
     "preview": "vite preview"
   },
   "devDependencies": {
