@@ -3,7 +3,6 @@ import { resolve } from 'path';
 import banner from 'vite-plugin-banner';
 import mkcert from 'vite-plugin-mkcert';
 import browserslistToEsbuild from "browserslist-to-esbuild";
-import sass from 'sass';
 
 export default defineConfig({
   plugins: [
@@ -49,24 +48,24 @@ export default defineConfig({
   ],
   build: {
     target: browserslistToEsbuild([">1%", "not dead"]),
+    cssCodeSplit: false,
     lib: {
       entry: resolve(__dirname, 'src/main.ts'),
       name: 'PETARememberMe',
       fileName: 'welcome-back',
-      formats: ['es']
+      formats: ['iife']
     },
     rollupOptions: {
       external: [],
       output: {
         entryFileNames: 'welcome-back.js',
-        assetFileNames: 'welcome-back.css',
       },
     },
   },
   css: {
     preprocessorOptions: {
       scss: {
-        implementation: sass,
+        api: 'modern-compiler', // Recommended for better performance
       },
     },
   },

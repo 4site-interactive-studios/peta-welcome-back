@@ -1,26 +1,30 @@
 {
   "compilerOptions": {
-    "types": ["vite/client","node"],
-    "target": "es2023",
+    "typeRoots": ["node_modules/@types", "src/types"],
+    "target": "ES2023",
     "useDefineForClassFields": true,
-    "module": "esnext",
+    "module": "ESNext",
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": false,
-    "moduleDetection": "force",
-    "noEmit": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+
+    /* Interop */
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
 
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
+    "noImplicitOverride": true,
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src"]
