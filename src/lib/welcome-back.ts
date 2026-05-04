@@ -43,6 +43,7 @@ const defaultConfig: WelcomeBackConfig = {
 export default class WelcomeBack {
     private config: WelcomeBackConfig;
     private logger = new Logger('WB-WelcomeBack');
+    private welcomeBackBlock: HTMLElement | null = null;
 
     constructor() {
         this.config = { ...defaultConfig, language: is_peta_latino() ? 'es' : 'en', ...window.WelcomeBackOptions };
@@ -71,6 +72,7 @@ export default class WelcomeBack {
         const autofillClearedHandler = () => {
             this.logger.log("Clear autofill event detected");
             this.setBodyData(false);
+            this.removeWelcomeBackBlock();
         };
 
         if (this.getSupporterDetails() !== null) {
@@ -95,11 +97,29 @@ export default class WelcomeBack {
             return;
         }
 
-        const welcomeBackBlock = this.createWelcomeBackBlock(supporterDetails);
-        insertLocation.insertAdjacentElement('afterend', welcomeBackBlock);
+        if (this.welcomeBackBlock) {
+            this.logger.log("Welcome Back block already displayed. Updating with new supporter details.", "ℹ️");
+            this.removeEditButtonListener();
+            const newBlock = this.createWelcomeBackBlock(supporterDetails);
+            this.welcomeBackBlock.replaceWith(newBlock);
+            this.welcomeBackBlock = newBlock;
+            this.addEditButtonListener();
+        } else {
+            const welcomeBackBlock = this.createWelcomeBackBlock(supporterDetails);
+            insertLocation.insertAdjacentElement('afterend', welcomeBackBlock);
+            this.welcomeBackBlock = welcomeBackBlock;
+            this.addEditButtonListener();
+        }
 
-        this.addEditButtonListener();
         this.setBodyData(true);
+    }
+
+    private removeWelcomeBackBlock(): void {
+        this.removeEditButtonListener();
+        if (this.welcomeBackBlock) {
+            this.welcomeBackBlock.remove();
+            this.welcomeBackBlock = null;
+        }
     }
 
     private createWelcomeBackBlock(details: SupporterDetails): HTMLElement {
@@ -134,15 +154,24 @@ export default class WelcomeBack {
     }
 
     private addEditButtonListener(): void {
-        document.getElementById('welcome-back-edit')?.addEventListener('click', () => {
-            this.logger.log("Edit button clicked. Clearing auto-filled supporter details.");
-            const clearAutofillButton = document.querySelector('#clear-autofill-data');
-            if (clearAutofillButton) {
-                clearAutofillButton.dispatchEvent(new Event('click'));
-            } else {
-                this.clearFieldsWithCompatibilityLayer();
-            }
-        });
+        document.getElementById('welcome-back-edit')?.addEventListener('click', this.handleEditButtonClick.bind(this));
+    }
+
+    private removeEditButtonListener(): void {
+        const editButton = document.getElementById('welcome-back-edit');
+        if (editButton) {
+            editButton.removeEventListener('click', this.handleEditButtonClick);
+        }
+    }
+
+    private handleEditButtonClick(): void {
+        this.logger.log("Edit button clicked. Clearing auto-filled supporter details.");
+        const clearAutofillButton = document.querySelector('#clear-autofill-data');
+        if (clearAutofillButton) {
+            clearAutofillButton.dispatchEvent(new Event('click'));
+        } else {
+            this.clearFieldsWithCompatibilityLayer();
+        }
     }
 
     private clearFieldsWithCompatibilityLayer(): void {

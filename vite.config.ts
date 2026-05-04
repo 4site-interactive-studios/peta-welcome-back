@@ -26,7 +26,7 @@ export default defineConfig({
  *  //                                                //
  *  ////////////////////////////////////////////////////
  *  //                                                //
- *  //               PETA Remember Me                 //
+ *  //        PETA Remember Me / Welcome Back         //
  *  //                                                //
  *  //        Build Date:  ${new Date().toLocaleDateString("en-US", {
         year: "numeric",
