@@ -10,9 +10,11 @@ import { elementExists } from "./common";
 interface WelcomeBackConfig {
     language?: string;
     location_selector: string;
+    location_position: 'beforebegin' | 'afterbegin' | 'beforeend' | 'afterend';
     hide_clear_autofill: boolean;
     hide_change_paymenttype: boolean;
     conditional_hide_selectors: string[];
+    shoppingCart: boolean;
     run: boolean;
 }
 
@@ -34,10 +36,12 @@ declare global {
 
 const defaultConfig: WelcomeBackConfig = {
     location_selector: '.en__field--emailAddress',
+    location_position: 'afterbegin',
     hide_clear_autofill: true,
     hide_change_paymenttype: false,
     conditional_hide_selectors: EN_FIELDS_TO_HIDE,
-    run: true
+    shoppingCart: false,
+    run: true,
 };
 
 export default class WelcomeBack {
@@ -47,7 +51,8 @@ export default class WelcomeBack {
 
     constructor() {
         this.config = { ...defaultConfig, language: is_peta_latino() ? 'es' : 'en', ...window.WelcomeBackOptions };
-        this.setBodyData(false);
+        this.setBodyData('welcome-back', false);
+        this.setBodyData('welcome-back-shopping-cart', this.config.shoppingCart);
         if (this.shouldRun() && this.config.run) {
             this.logger.log("Initializing WelcomeBack", "🎉");
             this.createCSS();
@@ -71,7 +76,7 @@ export default class WelcomeBack {
 
         const autofillClearedHandler = () => {
             this.logger.log("Clear autofill event detected");
-            this.setBodyData(false);
+            this.setBodyData('welcome-back', false);
             this.removeWelcomeBackBlock();
         };
 
@@ -106,12 +111,15 @@ export default class WelcomeBack {
             this.addEditButtonListener();
         } else {
             const welcomeBackBlock = this.createWelcomeBackBlock(supporterDetails);
-            insertLocation.insertAdjacentElement('afterend', welcomeBackBlock);
+            insertLocation.insertAdjacentElement(this.config.location_position, welcomeBackBlock);
+            if (this.config.shoppingCart) {
+                insertLocation.parentElement?.setAttribute('data-welcome-back-parent', 'true');
+            }
             this.welcomeBackBlock = welcomeBackBlock;
             this.addEditButtonListener();
         }
 
-        this.setBodyData(true);
+        this.setBodyData('welcome-back', true);
     }
 
     private removeWelcomeBackBlock(): void {
@@ -183,7 +191,7 @@ export default class WelcomeBack {
             } else {
                 this.logger.log("Failed to clear auto-filled fields.", "🔴");
             }
-            this.setBodyData(false);
+            this.setBodyData('welcome-back', false);
         });
     }
 
@@ -223,6 +231,9 @@ export default class WelcomeBack {
 
     private createCSS(): void {
         if (!this.config.conditional_hide_selectors) return;
+        if (this.config.shoppingCart) {
+            this.config.conditional_hide_selectors.push('.en__component--column--1:has(+ .en__component--column--2[data-welcome-back-parent="true"])')
+        }
         let stylesheet = `
             ${this.config.conditional_hide_selectors.map(selector => `[data-welcome-back="true"] ${selector}`).join(', ')} {
                 display: none !important;
@@ -239,8 +250,8 @@ export default class WelcomeBack {
         document.head.appendChild(style);
     }
 
-    private setBodyData(value: boolean): void {
-        document.body.setAttribute('data-welcome-back', value ? 'true' : 'false');
+    private setBodyData(tag: string, value: boolean): void {
+        document.body.setAttribute(`data-${tag}`, value ? 'true' : 'false');
     }
 
 }
