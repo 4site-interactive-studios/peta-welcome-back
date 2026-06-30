@@ -36,7 +36,7 @@ declare global {
 
 const defaultConfig: WelcomeBackConfig = {
     location_selector: '.en__field--emailAddress',
-    location_position: 'afterbegin',
+    location_position: 'afterend',
     hide_clear_autofill: true,
     hide_change_paymenttype: false,
     conditional_hide_selectors: EN_FIELDS_TO_HIDE,
